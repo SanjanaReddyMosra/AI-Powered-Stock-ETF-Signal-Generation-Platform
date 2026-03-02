@@ -1,0 +1,29 @@
+A Novel Time-Aware Food Recommender-System Based on Deep Learning and Graph Clustering
+
+
+IEEE Access and Machine Learning,Volume:10,Issue Date:16.May.2022
+
+Recommender-system, food recommendation, healthcare, deep learning, graph clustering.
+
+A_Novel_Time_Aware_Food_Recommender_System
+
+a_novel_time_aware_food_recommender_system
+
+
+
+
+
+food_recommend_type
+
+
+Foodid
+Userid
+Following_Users
+Followers
+Rating
+Time
+Review
+Prediction
+
+
+
