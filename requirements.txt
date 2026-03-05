@@ -7,3 +7,4 @@ joblib
 streamlit
 matplotlib
 tensorflow
+protobuf==3.20.3
