@@ -8,3 +8,9 @@ joblib
 matplotlib
 altair
 protobuf==3.20.3
+fastapi
+uvicorn
+pymongo
+passlib
+python-dotenv
+apscheduler
