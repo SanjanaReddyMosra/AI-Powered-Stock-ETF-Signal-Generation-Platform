@@ -1,40 +1,45 @@
 import ta
 
-
 def add_features(df):
 
-    df["SMA10"] = df["Close"].rolling(10).mean()
-    df["SMA50"] = df["Close"].rolling(50).mean()
+    # Convert columns to 1D
+    close = df["Close"].squeeze()
+    high = df["High"].squeeze()
+    low = df["Low"].squeeze()
+    volume = df["Volume"].squeeze()
 
-    df["RSI"] = ta.momentum.RSIIndicator(df["Close"]).rsi()
+    df["SMA10"] = close.rolling(10).mean()
+    df["SMA50"] = close.rolling(50).mean()
 
-    macd = ta.trend.MACD(df["Close"])
+    df["RSI"] = ta.momentum.RSIIndicator(close=close).rsi()
+
+    macd = ta.trend.MACD(close=close)
     df["MACD"] = macd.macd()
 
-    bb = ta.volatility.BollingerBands(df["Close"])
+    bb = ta.volatility.BollingerBands(close=close)
 
     df["BB_high"] = bb.bollinger_hband()
     df["BB_low"] = bb.bollinger_lband()
 
-    df["returns"] = df["Close"].pct_change()
+    df["returns"] = close.pct_change()
 
     df["volatility"] = df["returns"].rolling(10).std()
 
-    df["momentum"] = df["Close"] - df["Close"].shift(10)
+    df["momentum"] = close - close.shift(10)
 
     df["volatility_20"] = df["returns"].rolling(20).std()
 
-    df["price_change"] = df["Close"].pct_change(3)
+    df["price_change"] = close.pct_change(3)
 
-    df["ema20"] = df["Close"].ewm(span=20).mean()
-    df["ema50"] = df["Close"].ewm(span=50).mean()
+    df["ema20"] = close.ewm(span=20).mean()
+    df["ema50"] = close.ewm(span=50).mean()
 
     df["trend_strength"] = df["ema20"] - df["ema50"]
 
-    df["volume_ma"] = df["Volume"].rolling(20).mean()
-    df["volume_ratio"] = df["Volume"] / df["volume_ma"]
+    df["volume_ma"] = volume.rolling(20).mean()
+    df["volume_ratio"] = volume / df["volume_ma"]
 
-    df["price_range"] = df["High"] - df["Low"]
+    df["price_range"] = high - low
 
     df = df.dropna()
 
