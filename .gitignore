@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+.env
+mock_users.json
+mock_preds.json
+models/
+.idea/
