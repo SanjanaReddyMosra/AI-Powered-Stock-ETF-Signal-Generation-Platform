@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication | AlgoSignal AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 100px auto;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 32px;
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+        .tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+        }
+        .tab.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .auth-form input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+        }
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo" style="justify-content: center; margin-bottom: 1.5rem;">
+            <img src="logo.png" alt="AlgoSignal Logo">
+            <span>AlgoSignal AI</span>
+        </div>
+        
+        <div class="tabs">
+            <div id="loginTab" class="tab active" onclick="switchTab('login')">Login</div>
+            <div id="registerTab" class="tab" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <div id="loginForm" class="auth-form">
+            <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Log in to access your trading signals</p>
+            <input type="email" id="loginEmail" placeholder="Email Address">
+            <input type="password" id="loginPass" placeholder="Password">
+            <button onclick="submitLogin()" class="btn-primary" style="padding: 1.25rem; margin-top: 1rem;">Sign In</button>
+        </div>
+
+        <div id="registerForm" class="auth-form" style="display: none;">
+            <h2 style="margin-bottom: 0.5rem;">Join AlgoSignal</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Start your AI-powered trading journey</p>
+            <input type="text" id="regName" placeholder="Full Name">
+            <input type="email" id="regEmail" placeholder="Email Address">
+            <input type="password" id="regPass" placeholder="Strong Password">
+            <button onclick="submitRegister()" class="btn-primary" style="padding: 1.25rem; margin-top: 1rem;">Create Account</button>
+        </div>
+
+        <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
+            By continuing, you agree to our Terms of Service.
+        </p>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        function switchTab(tab) {
+            document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+            document.getElementById('registerTab').classList.toggle('active', tab === 'register');
+            document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
+            document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
+        }
+
+        async function submitLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPass').value;
+            if (!email || !password) return alert("Fill all fields");
+
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+                window.location.href = 'index.html';
+            } else {
+                alert(data.detail || "Login failed");
+            }
+        }
+
+        async function submitRegister() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPass').value;
+            if (!name || !email || !password) return alert("Fill all fields");
+
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+                window.location.href = 'index.html';
+            } else {
+                alert(data.detail || "Registration failed");
+            }
+        }
+    </script>
+</body>
+</html>

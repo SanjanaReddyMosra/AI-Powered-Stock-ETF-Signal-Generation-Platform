@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Alerts | AlgoSignal AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="AlgoSignal Logo">
+                <span>AlgoSignal AI</span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i>📊</i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="alerts.html" class="nav-link active">
+                        <i>🔔</i> Alerts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="tabular.html" class="nav-link">
+                        <i>🧠</i> Analytics
+                    </a>
+                </li>
+            </ul>
+            <div id="userProfile" class="user-sidebar-bottom">
+                <div class="user-info">
+                    <div class="avatar" id="userInitial">?</div>
+                    <div>
+                        <div id="userName" style="font-weight: 700; font-size: 0.9rem;">Guest User</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Free Tier</div>
+                    </div>
+                </div>
+                <button onclick="handleAuthAction()" id="authBtn" class="nav-link" style="width: 100%; border: none; background: none; cursor: pointer;">
+                    <i>🔑</i> Login
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="subscribe-pane">
+                <div class="glass-form">
+                    <span style="font-size: 3rem; margin-bottom: 2rem; display: block;">📨</span>
+                    <h2>Predictive Alerts</h2>
+                    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto;">
+                        Get high-conviction signals delivered directly to your inbox. 
+                        Our AI engine executes background jobs every 15 minutes.
+                    </p>
+                    
+                    <form id="subscribeForm" class="form-group">
+                        <input type="email" id="email" placeholder="Enter your corporate or personal email..." required>
+                        <button type="submit" class="btn-primary">Activate Alerts</button>
+                    </form>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast">Alerts Activated! Check your inbox soon.</div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

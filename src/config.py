@@ -19,4 +19,10 @@ class Config:
     TRAIN_TEST_SPLIT = 0.8
     TARGET_ACCURACY_THRESHOLD = 0.85
 
+    # Email Alert Configuration
+    SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+    SENDER_EMAIL = os.getenv("SENDER_EMAIL", "")
+    SENDER_PASSWORD = os.getenv("SENDER_PASSWORD", "")
+
 config = Config()
