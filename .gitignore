@@ -4,5 +4,6 @@ __pycache__/
 .env
 mock_users.json
 mock_preds.json
+mock_subscribers.json
 models/
 .idea/

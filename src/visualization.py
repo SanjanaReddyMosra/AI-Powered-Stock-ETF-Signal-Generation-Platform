@@ -99,3 +99,37 @@ def plot_probability_gauge(probability, signal):
         margin=dict(l=20, r=20, t=40, b=20)
     )
     return fig
+
+def plot_equity_curve(df, ticker):
+    """
+    Plots the cumulative strategy returns (Equity Curve).
+    """
+    if 'equity_curve' not in df.columns:
+        return None
+        
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=df.index, 
+        y=df['equity_curve'],
+        mode='lines',
+        line=dict(color='#00c8ff', width=3),
+        fill='tozeroy',
+        fillcolor='rgba(0, 200, 255, 0.1)',
+        name='ML Strategy Performance'
+    ))
+    
+    fig.update_layout(
+        title=f"{ticker} Strategy Equity Curve (Performance)",
+        title_font=dict(size=18, family="Inter", color="white"),
+        template="plotly_dark",
+        paper_bgcolor="rgba(20, 20, 24, 1)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=40, r=40, t=50, b=40),
+        yaxis_title="Growth of $1",
+        xaxis_title="Date",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(gridcolor="rgba(255,255,255,0.05)")
+    )
+    
+    return fig

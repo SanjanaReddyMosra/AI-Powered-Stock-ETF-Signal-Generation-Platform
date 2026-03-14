@@ -106,3 +106,67 @@ def send_signal_email(user_email, user_name, ticker, signal, price, accuracy):
     except Exception as e:
         print(f"Failed to send email to {user_email}: {e}")
         return False
+
+def send_market_summary_email(user_email, stocks_summary):
+    """Sends a summary of current market signals immediately after subscription."""
+    if not config.SENDER_EMAIL or not config.SENDER_PASSWORD:
+        return False
+
+    msg = MIMEMultipart()
+    msg['From'] = config.SENDER_EMAIL
+    msg['To'] = user_email
+    msg['Subject'] = "AlgoSignal AI: Your Live Market Intelligence Summary 🚀"
+
+    stock_rows = ""
+    for s in stocks_summary:
+        color = "#00e676" if s['signal'] == "BUY" else ("#ff5252" if s['signal'] == "SELL" else "#8b949e")
+        stock_rows += f"""
+        <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #30363d;">
+                <strong style="color: #f0f6fc;">{s['name']}</strong> <span style="color: #8b949e; font-size: 0.8rem;">({s['ticker']})</span>
+            </td>
+            <td style="padding: 12px; border-bottom: 1px solid #30363d; color: {color}; font-weight: 800;">{s['signal']}</td>
+            <td style="padding: 12px; border-bottom: 1px solid #30363d; color: #c9d1d9;">${s['price']:,.2f}</td>
+        </tr>
+        """
+
+    html_content = f"""
+    <html>
+      <body style="font-family: 'Inter', sans-serif; background-color: #0d1117; color: #ffffff; padding: 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 30px;">
+          <h2 style="color: #ff8c00; margin-bottom: 10px;">Welcome to AlgoSignal AI!</h2>
+          <p style="color: #8b949e;">You are now subscribed to predictive alerts. Here is the current market state as detected by our AI:</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0; background: #0d1117; border-radius: 8px; overflow: hidden;">
+            <thead style="background: #1c2128;">
+              <tr>
+                <th style="text-align: left; padding: 12px; color: #8b949e; font-size: 0.8rem;">ASSET</th>
+                <th style="text-align: left; padding: 12px; color: #8b949e; font-size: 0.8rem;">SIGNAL</th>
+                <th style="text-align: left; padding: 12px; color: #8b949e; font-size: 0.8rem;">PRICE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stock_rows}
+            </tbody>
+          </table>
+
+          <p style="font-size: 0.9rem; color: #8b949e;">Our engine will notify you the moment any of these signals change.</p>
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="http://localhost:8000" style="background: #238636; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: 600;">Open Dashboard</a>
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+    msg.attach(MIMEText(html_content, 'html'))
+
+    try:
+        server = smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT)
+        server.starttls()
+        server.login(config.SENDER_EMAIL, config.SENDER_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error sending market summary: {e}")
+        return False

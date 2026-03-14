@@ -11,7 +11,9 @@ AlgoSignal AI is a high-performance, AI-driven stock and ETF signal generation p
 - **Deep Analytics**: Historical price trends and AI confidence mapping using Chart.js.
 - **Secure Authentication**: JWT-based user system for personalized experiences.
 - **Market Intelligence**: Sortable tabular view for cross-asset comparison.
-- **Alert Engine**: Continuous background monitoring for signal changes.
+- **Backtesting & Analytics**: Automated reporting of Sharpe Ratio, Max Drawdown, and Win Rates with Equity Curve visualizations.
+- **Interactive Dashboards**: Dual-layered visualization using both Streamlit (Advanced Analytics) and FastAPI/Vanilla JS (Real-time Monitoring).
+- **Threshold Alerting**: Smart price-movement detection (>3%) integrated with the email alert engine.
 
 ## 🛠️ Tech Stack
 

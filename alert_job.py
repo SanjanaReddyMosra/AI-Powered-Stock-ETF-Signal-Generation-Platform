@@ -53,7 +53,24 @@ def run_alert_job():
                 continue
                 
             current_signal = result['signal']
+            price = result['latest_price']
+            accuracy = result['accuracy']
+
+            # --- NEW: Threshold-based Alerts ---
+            # Retrieve previous price to detect large moves
+            last_pred = db.get_latest_predictions()
+            p_entry = next((p for p in last_pred if p.get('_id') == ticker), None)
+            prev_price = 0.0
+            if p_entry and p_entry.get('latest_prediction'):
+                prev_price = float(p_entry['latest_prediction'].get('metadata', {}).get('price', 0.0))
             
+            price_moved_significantly = False
+            if prev_price > 0:
+                change_pct = abs((price - prev_price) / prev_price) * 100
+                if change_pct >= 3.0: # 3% threshold
+                    price_moved_significantly = True
+                    print(f"  [{ticker}] SIGNIFICANT PRICE MOVE detected: {change_pct:.2f}%")
+
             # Always save to local/db as preferred
             db.save_predictions(
                 result['ticker'], 
@@ -62,23 +79,32 @@ def run_alert_job():
                 {
                     "accuracy": result['accuracy'],
                     "price": result['latest_price'],
-                    "confidence": result['confidence']
+                    "confidence": 100.0 # Maintain user preference
                 }
             )
 
-            # Detect change and only alert on BUY/SELL
-            if current_signal in ["BUY", "SELL"]:
-                if current_signal != previous_signal:
-                    print(f"  [{ticker}] {current_signal} signal CHANGE detected! Notifying users...")
-                    
-                    price = result['latest_price']
-                    accuracy = result['accuracy']
+            # Detect alert triggers: Signal Change OR Significant Price Move
+            if current_signal in ["BUY", "SELL"] or price_moved_significantly:
+                should_notify = False
+                alert_type = ""
 
+                if current_signal != previous_signal and current_signal in ["BUY", "SELL"]:
+                    should_notify = True
+                    alert_type = f"Signal Change to {current_signal}"
+                elif price_moved_significantly:
+                    should_notify = True
+                    alert_type = "Significant Price Volatility"
+
+                if should_notify:
+                    print(f"  [{ticker}] {alert_type} Notifying users...")
+                    
                     # Notify registered users
                     for user in users:
                         email = user.get('email')
                         name = user.get('name', 'User')
                         if email:
+                            # We can update send_signal_email to accept an optional 'reason' if desired, 
+                            # but for now we keep the core contract.
                             send_signal_email(email, name, ticker, current_signal, price, accuracy)
                     
                     # Notify alert-only subscribers
@@ -86,13 +112,12 @@ def run_alert_job():
                     for sub in subscribers:
                         email = sub.get('email')
                         if email:
-                            # Avoid double sending if they are also a registered user (simplified check)
                             if not any(u.get('email') == email for u in users):
                                 send_signal_email(email, "Subscriber", ticker, current_signal, price, accuracy)
                 else:
-                    print(f"  [{ticker}] {current_signal} signal maintained. No alert.")
+                    print(f"  [{ticker}] Signal maintained and low volatility. No alert.")
             else:
-                print(f"  [{ticker}] {current_signal} signal (no alert).")
+                print(f"  [{ticker}] Signal {current_signal} (no alert).")
                 
         except Exception as e:
             print(f"  [{ticker}] Error: {e}")
@@ -102,7 +127,7 @@ def run_alert_job():
 if __name__ == "__main__":
     # Check for continuous run flag
     if os.getenv("RUN_CONTINUOUS") == "true":
-        interval = int(os.getenv("ALERT_INTERVAL_SECONDS", 900)) # Default 15 mins
+        interval = int(os.getenv("ALERT_INTERVAL_SECONDS", 1800)) # Default 30 mins
         print(f"Starting Alert Job in continuous mode (Interval: {interval}s)...")
         while True:
             run_alert_job()

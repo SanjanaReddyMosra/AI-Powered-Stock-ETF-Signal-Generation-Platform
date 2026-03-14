@@ -8,6 +8,7 @@ from pydantic import BaseModel, EmailStr
 from src.database import db
 from src.config import config
 from src.auth import hash_password, verify_password
+from src.notifier import send_market_summary_email
 import uvicorn
 import os
 
@@ -91,7 +92,7 @@ async def get_stocks():
                     "signal": str(pred.get('signal', 'HOLD')),
                     "price": price,
                     "accuracy": acc,
-                    "confidence": conf or (90.0 if pred.get('signal') != 'HOLD' else 50.0),
+                    "confidence": 100.0, # User requested 100% confidence display
                     "change": 1.25
                 })
             else:
@@ -132,7 +133,7 @@ async def get_stock_detail(ticker: str):
                     "signal": "BUY" if random.random() > 0.6 else ("SELL" if random.random() < 0.2 else "HOLD"),
                     "metadata": {
                         "price": base_price,
-                        "confidence": 75 + random.random() * 20,
+                        "confidence": 100.0,
                         "accuracy": 98.4
                     }
                 })
@@ -151,6 +152,39 @@ async def get_stock_detail(ticker: str):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/subscribe")
+async def subscribe(request: SubscriptionRequest):
+    print(f"DEBUG: Received subscription request for {request.email}")
+    try:
+        success = db.add_subscriber(request.email)
+        print(f"DEBUG: DB add_subscriber result: {success}")
+        
+        if success:
+            # Generate current summary for the email
+            print("DEBUG: Fetching stocks for summary...")
+            stocks = await get_stocks()
+            summary = []
+            for s in stocks:
+                summary.append({
+                    "ticker": s['ticker'],
+                    "name": next((val for key, val in {
+                        'AAPL': 'Apple Inc.', 'MSFT': 'Microsoft Corp.', 'GOOGL': 'Alphabet Inc.',
+                        'AMZN': 'Amazon.com Inc.', 'TSLA': 'Tesla, Inc.', 'NVDA': 'NVIDIA Corp.',
+                        'META': 'Meta Platforms', 'SPY': 'S&P 500 ETF', 'QQQ': 'Nasdaq 100', 'JPM': 'JPMorgan Chase'
+                    }.items() if key == s['ticker']), s['ticker']),
+                    "signal": s['signal'],
+                    "price": s['price']
+                })
+            
+            print(f"DEBUG: Sending summary email to {request.email}...")
+            email_sent = send_market_summary_email(request.email, summary)
+            print(f"DEBUG: Email send result: {email_sent}")
+            
+        return {"message": "Successfully subscribed" if success else "Already subscribed"}
+    except Exception as e:
+        print(f"DEBUG: ERROR in subscribe endpoint: {e}")
+        return {"message": f"Error: {str(e)}"}
 
 @app.get("/api/diagnostic")
 async def diagnostic():

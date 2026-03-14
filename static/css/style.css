@@ -325,6 +325,7 @@ input[type="email"]:focus {
     color: black;
     font-weight: 700;
     opacity: 0;
+    z-index: 1000;
     transform: translateY(100px);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
