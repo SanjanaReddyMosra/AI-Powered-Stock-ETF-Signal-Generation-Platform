@@ -7,7 +7,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
 from src.database import db
 from src.config import config
-from src.auth import hash_password, verify_password
+from src.auth_utils import hash_password, verify_password
 from src.notifier import send_market_summary_email
 import uvicorn
 import os
