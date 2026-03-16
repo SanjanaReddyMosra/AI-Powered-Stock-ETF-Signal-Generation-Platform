@@ -256,10 +256,10 @@ async def diagnostic():
         latest_preds = db.get_latest_predictions()
         return {
             "atlas_connected": db.is_connected(),
-            "local_file_exists": os.path.exists('mock_preds.json'),
+            "email_configured": bool(config.SENDER_EMAIL and config.SENDER_PASSWORD),
+            "sender_email_set": config.SENDER_EMAIL,
             "predictions_count": len(latest_preds),
-            "tickers_found": [p.get('_id') for p in latest_preds],
-            "sample_data": latest_preds[:2] if latest_preds else []
+            "tickers_found": [p.get('_id') for p in latest_preds]
         }
     except Exception as e:
         return {"error": str(e)}
