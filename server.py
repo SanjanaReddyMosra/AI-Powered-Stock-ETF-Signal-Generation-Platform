@@ -255,6 +255,7 @@ async def diagnostic():
     try:
         latest_preds = db.get_latest_predictions()
         return {
+            "version": "v101",
             "atlas_connected": db.is_connected(),
             "email_configured": bool(config.SENDER_EMAIL and config.SENDER_PASSWORD),
             "sender_email_set": config.SENDER_EMAIL,
