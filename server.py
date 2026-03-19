@@ -127,24 +127,62 @@ async def get_stock_detail(ticker: str):
         if ticker not in config.TARGET_TICKERS:
             raise HTTPException(status_code=404, detail="Ticker not monitored")
         
-        # Fetch combined history from local and Atlas
-        ticker_history = db.get_ticker_history(ticker, limit=20)
+        # 1. Fetch real historical price data (last 30 days) from Yahoo Finance
+        from src.data_ingestion import fetch_data
+        df_prices = fetch_data(ticker)
         
-        if not ticker_history:
-            # Emergency fallback: generate one point if totally empty so UI doesn't crash
-            ticker_history = [{
+        # 2. Fetch our recorded AI signals from the DB
+        recorded_history = db.get_ticker_history(ticker, limit=100)
+        # Create a lookup for recorded signals by date (YYYY-MM-DD)
+        signal_lookup = {item['date'].split(' ')[0]: item for item in recorded_history}
+        
+        # 3. Build a combined history for the last 30 points
+        combined_history = []
+        if df_prices is not None and not df_prices.empty:
+            # Take last 30 days
+            last_30 = df_prices.tail(30)
+            for date, row in last_30.iterrows():
+                date_str = date.strftime('%Y-%m-%d')
+                
+                # If we have a real prediction for this day, use it
+                if date_str in signal_lookup:
+                    item = signal_lookup[date_str]
+                    combined_history.append({
+                        "ticker": ticker,
+                        "date": date_str,
+                        "signal": item['signal'],
+                        "metadata": {
+                            "price": float(row['close']), # Use real price from yfinance
+                            "confidence": item.get('metadata', {}).get('confidence', 100.0),
+                            "accuracy": item.get('metadata', {}).get('accuracy', 98.0)
+                        }
+                    })
+                else:
+                    # Otherwise, show the price with a 'HOLD' or 'NONE' signal to populate the chart
+                    combined_history.append({
+                        "ticker": ticker,
+                        "date": date_str,
+                        "signal": "HOLD", # Default to HOLD for visualization
+                        "metadata": {
+                            "price": float(row['close']),
+                            "confidence": 0.0, # Visual indicator that it's just price data
+                            "accuracy": 0.0
+                        }
+                    })
+        
+        if not combined_history:
+            # Absolute fallback
+            combined_history = [{
                 "ticker": ticker,
-                "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "date": datetime.datetime.now().strftime("%Y-%m-%d"),
                 "signal": "HOLD",
-                "metadata": {"price": 100.0, "confidence": 50.0, "accuracy": 85.0}
+                "metadata": {"price": 0.0, "confidence": 0.0, "accuracy": 0.0}
             }]
-        
-        ticker_history.reverse() # UI expects chronological for charts
         
         return {
             "ticker": ticker,
             "name": ticker, # In production fetch real name
-            "history": ticker_history,
+            "history": combined_history,
             "metrics": {
                 "volatility": "High",
                 "trend": "Bullish",
