@@ -95,9 +95,8 @@ def send_signal_email(user_email, user_name, ticker, signal, price, accuracy):
     msg.attach(MIMEText(html_content, 'html'))
 
     try:
-        # Connect to server and send
-        server = smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT)
-        server.starttls()
+        # Use SMTP_SSL on port 465 for secure, cloud-friendly connections
+        server = smtplib.SMTP_SSL(config.SMTP_SERVER, 465, timeout=15)
         server.login(config.SENDER_EMAIL, config.SENDER_PASSWORD)
         server.send_message(msg)
         server.quit()
@@ -161,8 +160,7 @@ def send_market_summary_email(user_email, stocks_summary):
     msg.attach(MIMEText(html_content, 'html'))
 
     try:
-        server = smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT)
-        server.starttls()
+        server = smtplib.SMTP_SSL(config.SMTP_SERVER, 465, timeout=15)
         server.login(config.SENDER_EMAIL, config.SENDER_PASSWORD)
         server.send_message(msg)
         server.quit()
@@ -275,8 +273,7 @@ def send_periodic_market_update_email(recipient_email, stocks_data, cycle_count=
     msg.attach(MIMEText(html_content, 'html'))
 
     try:
-        server = smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT)
-        server.starttls()
+        server = smtplib.SMTP_SSL(config.SMTP_SERVER, 465, timeout=15)
         server.login(config.SENDER_EMAIL, config.SENDER_PASSWORD)
         server.send_message(msg)
         server.quit()
@@ -293,7 +290,7 @@ def send_detailed_market_report_email(recipient_email, stocks_data):
     """
     if not config.SENDER_EMAIL or not config.SENDER_PASSWORD:
         print(f"Skipping report email to {recipient_email}: SMTP credentials not configured.")
-        return False
+        return False, "SMTP credentials not configured"
 
     from datetime import datetime
     import pytz
@@ -389,12 +386,11 @@ def send_detailed_market_report_email(recipient_email, stocks_data):
     msg.attach(MIMEText(html_content, 'html'))
 
     try:
-        server = smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT)
-        server.starttls()
+        server = smtplib.SMTP_SSL(config.SMTP_SERVER, 465, timeout=15)
         server.login(config.SENDER_EMAIL, config.SENDER_PASSWORD)
         server.send_message(msg)
         server.quit()
-        return True
+        return True, "Success"
     except Exception as e:
         err_msg = str(e)
         print(f"Error sending detailed market report: {err_msg}")
