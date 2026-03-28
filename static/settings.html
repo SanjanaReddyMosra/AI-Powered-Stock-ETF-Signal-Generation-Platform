@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | AlgoSignal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="AlgoSignal Logo">
+                <span>AlgoSignal <small style="font-size: 0.6rem; color: var(--accent-color); vertical-align: super;">v3.0 (NEW)</small></span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html" class="nav-link"><i>⊞</i> Dashboard</a></li>
+                <li class="nav-item"><a href="engine.html" class="nav-link"><i>🧠</i> Signal Engine</a></li>
+                <li class="nav-item"><a href="backtesting.html" class="nav-link"><i>🕒</i> Backtesting</a></li>
+                <li class="nav-item"><a href="tabular.html" class="nav-link"><i>📊</i> Portfolio Analytics</a></li>
+                <li class="nav-item"><a href="alerts.html" class="nav-link"><i>🔔</i> Alerts</a></li>
+                <li class="nav-item"><a href="market.html" class="nav-link"><i>📉</i> Market Data</a></li>
+                <li class="nav-item"><a href="settings.html" class="nav-link active"><i>⚙️</i> Settings</a></li>
+            </ul>
+
+            <div id="userProfile" class="user-sidebar-bottom">
+                <div class="user-info">
+                    <div class="avatar" id="userInitial">?</div>
+                    <div>
+                        <div id="userName" style="font-weight: 700; font-size: 0.9rem;">Guest User</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Free Tier</div>
+                    </div>
+                </div>
+                <button onclick="handleAuthAction()" id="authBtn" class="nav-link" style="width: 100%; border: none; background: none; cursor: pointer;">
+                    <i>🔑</i> Login
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="topbar">
+                <div class="topbar-search">
+                    <i>🔍</i>
+                    <input type="text" id="topSearch" placeholder="Search stock...">
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-clock">
+                        <i style="color:var(--text-secondary)">🕒</i>
+                        <span id="liveClock">Loading...</span>
+                    </div>
+                    <div class="topbar-icon" id="notificationBtn">
+                        <i>🔔</i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="topbar-profile" id="topProfileInitial">?</div>
+                </div>
+            </nav>
+
+            <div class="page-container">
+            <header class="header">
+                <div>
+                        <h1 class="page-title">Platform Settings</h1>
+                        <p class="page-subtitle">Configure your preferences and integrations</p>
+                </div>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- Profile Settings -->
+                <div class="glass-form" style="padding: 2.5rem; border-radius: 20px;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;"><i style="margin-right: 8px;">👤</i> Profile Settings</h2>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Display Name</label>
+                        <input type="text" value="Guest User" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Email Address</label>
+                        <input type="email" value="guest@algosignal.local" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none;" readonly>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; padding: 1rem; border-radius: 12px;" onclick="showToast('Profile updated!', 'success')">Save Profile</button>
+                </div>
+
+                <!-- Notifications -->
+                <div class="glass-form" style="padding: 2.5rem; border-radius: 20px;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;"><i style="margin-right: 8px;">🔔</i> Alert Preferences</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div>
+                            <div style="font-weight: 700; margin-bottom: 4px;">Email Alerts</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Receive immediate Buy/Sell signal changes via email</div>
+                        </div>
+                        <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--accent-color);">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <div>
+                            <div style="font-weight: 700; margin-bottom: 4px;">In-App Notifications</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">Show a badge on the bell icon</div>
+                        </div>
+                        <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--accent-color);">
+                    </div>
+                </div>
+
+                <!-- API Keys -->
+                <div class="glass-form" style="padding: 2.5rem; border-radius: 20px; grid-column: 1 / -1;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;"><i style="margin-right: 8px;">🔌</i> External Integrations</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Alpaca Trading API Key</label>
+                            <input type="password" value="*************************" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none; margin-bottom: 1.5rem;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Discord Webhook URL</label>
+                            <input type="url" placeholder="https://discord.com/api/webhooks/..." style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none; margin-bottom: 1.5rem;">
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="padding: 1rem 2rem; border-radius: 12px;" onclick="showToast('Integrations synced successfully', 'success')">Sync Integrations</button>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 1rem;">Keys are encrypted and stored locally.</span>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+    <div id="toast"></div>
+    <script src="js/app.js?v=4"></script>
+</body>
+</html>

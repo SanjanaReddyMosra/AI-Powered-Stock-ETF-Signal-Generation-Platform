@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Data | AlgoSignal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="AlgoSignal Logo">
+                <span>AlgoSignal <small style="font-size: 0.6rem; color: var(--accent-color); vertical-align: super;">v3.0 (NEW)</small></span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html" class="nav-link"><i>⊞</i> Dashboard</a></li>
+                <li class="nav-item"><a href="engine.html" class="nav-link"><i>🧠</i> Signal Engine</a></li>
+                <li class="nav-item"><a href="backtesting.html" class="nav-link"><i>🕒</i> Backtesting</a></li>
+                <li class="nav-item"><a href="tabular.html" class="nav-link"><i>📊</i> Portfolio Analytics</a></li>
+                <li class="nav-item"><a href="alerts.html" class="nav-link"><i>🔔</i> Alerts</a></li>
+                <li class="nav-item"><a href="market.html" class="nav-link active"><i>📉</i> Market Data</a></li>
+                <li class="nav-item"><a href="settings.html" class="nav-link"><i>⚙️</i> Settings</a></li>
+            </ul>
+
+            <div id="userProfile" class="user-sidebar-bottom">
+                <div class="user-info">
+                    <div class="avatar" id="userInitial">?</div>
+                    <div>
+                        <div id="userName" style="font-weight: 700; font-size: 0.9rem;">Guest User</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Free Tier</div>
+                    </div>
+                </div>
+                <button onclick="handleAuthAction()" id="authBtn" class="nav-link" style="width: 100%; border: none; background: none; cursor: pointer;">
+                    <i>🔑</i> Login
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="topbar">
+                <div class="topbar-search">
+                    <i>🔍</i>
+                    <input type="text" id="topSearch" placeholder="Search stock...">
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-clock">
+                        <i style="color:var(--text-secondary)">🕒</i>
+                        <span id="liveClock">Loading...</span>
+                    </div>
+                    <div class="topbar-icon" id="notificationBtn">
+                        <i>🔔</i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="topbar-profile" id="topProfileInitial">?</div>
+                </div>
+            </nav>
+
+            <div class="page-container">
+            <header class="header">
+                <div>
+                        <h1 class="page-title">Market Data Feed</h1>
+                        <p class="page-subtitle">Real-time OHLCV Market Firehose</p>
+                </div>
+            </header>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div class="live-badge" style="background: rgba(0, 230, 118, 0.1); color: var(--success-color); border: 1px solid rgba(0, 230, 118, 0.3);">
+                    <span class="pulse-dot" style="background: var(--success-color);"></span>
+                    WebSocket Connected: wss://feed.algosignal.local
+                </div>
+                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                    Latency: <span style="color: var(--success-color); font-weight: 700;">12ms</span>
+                </div>
+            </div>
+
+            <div class="glass-form" style="padding: 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color);">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">
+                            <th style="padding: 1.2rem 1.5rem;">Asset</th>
+                            <th style="padding: 1.2rem 1.5rem;">Time</th>
+                            <th style="padding: 1.2rem 1.5rem;">Open</th>
+                            <th style="padding: 1.2rem 1.5rem;">High</th>
+                            <th style="padding: 1.2rem 1.5rem;">Low</th>
+                            <th style="padding: 1.2rem 1.5rem;">Close</th>
+                            <th style="padding: 1.2rem 1.5rem;">Volume</th>
+                            <th style="padding: 1.2rem 1.5rem;">VWAP</th>
+                            <th style="padding: 1.2rem 1.5rem;">Spread</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-family: monospace; font-size: 0.95rem;">
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem 1.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success-color);"></span> AAPL</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">12:45:11.042</td><td style="padding: 1rem 1.5rem;">$192.40</td><td style="padding: 1rem 1.5rem; color: var(--success-color);">$193.10</td><td style="padding: 1rem 1.5rem; color: var(--danger-color);">$191.05</td><td style="padding: 1rem 1.5rem; font-weight: 700;">$192.85</td><td style="padding: 1rem 1.5rem;">12.4M</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">192.15</td><td style="padding: 1rem 1.5rem; color: var(--accent-color);">0.02</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem 1.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success-color);"></span> TSLA</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">12:45:10.981</td><td style="padding: 1rem 1.5rem;">$240.10</td><td style="padding: 1rem 1.5rem; color: var(--success-color);">$242.00</td><td style="padding: 1rem 1.5rem; color: var(--danger-color);">$238.50</td><td style="padding: 1rem 1.5rem; font-weight: 700;">$241.20</td><td style="padding: 1rem 1.5rem;">34.1M</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">240.85</td><td style="padding: 1rem 1.5rem; color: var(--accent-color);">0.05</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem 1.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success-color);"></span> MSFT</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">12:45:10.500</td><td style="padding: 1rem 1.5rem;">$380.00</td><td style="padding: 1rem 1.5rem; color: var(--success-color);">$382.50</td><td style="padding: 1rem 1.5rem; color: var(--danger-color);">$379.20</td><td style="padding: 1rem 1.5rem; font-weight: 700;">$381.10</td><td style="padding: 1rem 1.5rem;">8.2M</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">380.90</td><td style="padding: 1rem 1.5rem; color: var(--accent-color);">0.03</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem 1.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success-color);"></span> SPY</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">12:45:09.112</td><td style="padding: 1rem 1.5rem;">$505.20</td><td style="padding: 1rem 1.5rem; color: var(--success-color);">$506.10</td><td style="padding: 1rem 1.5rem; color: var(--danger-color);">$504.80</td><td style="padding: 1rem 1.5rem; font-weight: 700;">$505.90</td><td style="padding: 1rem 1.5rem;">45.6M</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">505.50</td><td style="padding: 1rem 1.5rem; color: var(--accent-color);">0.01</td>
+                        </tr>
+                        <tr style="transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem 1.5rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 8px;"><span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success-color);"></span> NVDA</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">12:45:08.884</td><td style="padding: 1rem 1.5rem;">$850.10</td><td style="padding: 1rem 1.5rem; color: var(--success-color);">$860.00</td><td style="padding: 1rem 1.5rem; color: var(--danger-color);">$845.50</td><td style="padding: 1rem 1.5rem; font-weight: 700;">$858.70</td><td style="padding: 1rem 1.5rem;">22.3M</td><td style="padding: 1rem 1.5rem; color: var(--text-secondary);">855.20</td><td style="padding: 1rem 1.5rem; color: var(--accent-color);">0.15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </main>
+    </div>
+    <div id="toast"></div>
+    <script src="js/app.js?v=4"></script>
+</body>
+</html>

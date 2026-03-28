@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtesting | AlgoSignal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="AlgoSignal Logo">
+                <span>AlgoSignal <small style="font-size: 0.6rem; color: var(--accent-color); vertical-align: super;">v3.0 (NEW)</small></span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html" class="nav-link"><i>⊞</i> Dashboard</a></li>
+                <li class="nav-item"><a href="engine.html" class="nav-link"><i>🧠</i> Signal Engine</a></li>
+                <li class="nav-item"><a href="backtesting.html" class="nav-link active"><i>🕒</i> Backtesting</a></li>
+                <li class="nav-item"><a href="tabular.html" class="nav-link"><i>📊</i> Portfolio Analytics</a></li>
+                <li class="nav-item"><a href="alerts.html" class="nav-link"><i>🔔</i> Alerts</a></li>
+                <li class="nav-item"><a href="market.html" class="nav-link"><i>📉</i> Market Data</a></li>
+                <li class="nav-item"><a href="settings.html" class="nav-link"><i>⚙️</i> Settings</a></li>
+            </ul>
+
+            <div id="userProfile" class="user-sidebar-bottom">
+                <div class="user-info">
+                    <div class="avatar" id="userInitial">?</div>
+                    <div>
+                        <div id="userName" style="font-weight: 700; font-size: 0.9rem;">Guest User</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Free Tier</div>
+                    </div>
+                </div>
+                <button onclick="handleAuthAction()" id="authBtn" class="nav-link" style="width: 100%; border: none; background: none; cursor: pointer;">
+                    <i>🔑</i> Login
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="topbar">
+                <div class="topbar-search">
+                    <i>🔍</i>
+                    <input type="text" id="topSearch" placeholder="Search stock...">
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-clock">
+                        <i style="color:var(--text-secondary)">🕒</i>
+                        <span id="liveClock">Loading...</span>
+                    </div>
+                    <div class="topbar-icon" id="notificationBtn">
+                        <i>🔔</i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="topbar-profile" id="topProfileInitial">?</div>
+                </div>
+            </nav>
+
+            <div class="page-container">
+            <header class="header">
+                <div>
+                        <h1 class="page-title">Backtesting Module</h1>
+                        <p class="page-subtitle">Test AI Strategies against Historical Data</p>
+                </div>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                <!-- Config Form -->
+                <div class="glass-form" style="padding: 2rem; border-radius: 20px;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">Strategy Configuration</h2>
+                    <form onsubmit="event.preventDefault(); showToast('Simulating backtest...', 'success'); setTimeout(() => document.getElementById('btResults').style.display='block', 1500);">
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Target Asset</label>
+                            <select style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none; appearance: none;">
+                                <option value="AAPL">AAPL - Apple Inc.</option>
+                                <option value="TSLA">TSLA - Tesla</option>
+                                <option value="MSFT">MSFT - Microsoft</option>
+                                <option value="SPY">SPY - S&P 500 ETF</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Date Range</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date" value="2023-01-01" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 0.8rem; border-radius: 12px; outline: none;">
+                                <input type="date" value="2024-01-01" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 0.8rem; border-radius: 12px; outline: none;">
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 2.5rem;">
+                            <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 8px;">Initial Capital (USD)</label>
+                            <input type="number" value="10000" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: white; padding: 1rem; border-radius: 12px; outline: none;">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem; border-radius: 12px;">Run Simulation</button>
+                    </form>
+                </div>
+
+                <!-- Results Area -->
+                <div id="btResults" style="display: none;">
+                    <div class="stats-summary" style="margin-bottom: 1.5rem;">
+                        <div class="stat-card" style="padding: 1.5rem;">
+                            <span class="stat-label">Total Return</span>
+                            <div class="stat-val" style="color: var(--success-color);">+42.5%</div>
+                        </div>
+                        <div class="stat-card" style="padding: 1.5rem;">
+                            <span class="stat-label">Win Rate</span>
+                            <div class="stat-val">68.2%</div>
+                        </div>
+                        <div class="stat-card" style="padding: 1.5rem;">
+                            <span class="stat-label">Max Drawdown</span>
+                            <div class="stat-val" style="color: var(--danger-color);">-14.1%</div>
+                        </div>
+                        <div class="stat-card" style="padding: 1.5rem;">
+                            <span class="stat-label">Sharpe Ratio</span>
+                            <div class="stat-val" style="color: var(--accent-color);">1.85</div>
+                        </div>
+                    </div>
+                    <div class="glass-form" style="padding: 2rem; border-radius: 20px; text-align: left; height: 350px; display: flex; flex-direction: column;">
+                        <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; margin-bottom: auto;">Equity Curve Simulation</h3>
+                        <div style="width: 100%; height: 200px; position: relative; margin-top: auto;">
+                            <svg width="100%" height="100%" style="position: absolute; bottom: 0; left: 0;" viewBox="0 0 500 150" preserveAspectRatio="none">
+                                <path d="M0,150 L40,140 L80,145 L120,110 L160,90 L200,105 L240,60 L280,75 L320,40 L360,55 L400,20 L440,30 L500,10 L500,150 Z" fill="rgba(0, 230, 118, 0.1)"></path>
+                                <polyline points="0,150 40,140 80,145 120,110 160,90 200,105 240,60 280,75 320,40 360,55 400,20 440,30 500,10" fill="none" stroke="#00e676" stroke-width="3"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+    <div id="toast"></div>
+    <script src="js/app.js?v=4"></script>
+</body>
+</html>

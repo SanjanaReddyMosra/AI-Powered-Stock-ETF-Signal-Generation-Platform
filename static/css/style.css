@@ -98,7 +98,181 @@ body {
 .main-content {
     flex: 1;
     margin-left: 260px;
-    padding: 3rem;
+    padding: 0;
+}
+
+/* Topbar */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(13, 17, 23, 0.6);
+    backdrop-filter: var(--glass-blur);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.topbar-search {
+    position: relative;
+    width: 320px;
+}
+.topbar-search input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1rem 0.6rem 2.4rem;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s;
+}
+.topbar-search input:focus {
+    border-color: var(--accent-color);
+    background: rgba(255,255,255,0.1);
+}
+.topbar-search i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.topbar-clock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.topbar-icon {
+    position: relative;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+.topbar-icon:hover { color: white; }
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background: #1976D2; /* match the blue dot in screenshot or use --danger-color */
+    border-radius: 50%;
+    border: 2px solid var(--bg-color);
+}
+
+.topbar-profile {
+    width: 32px;
+    height: 32px;
+    background: #1976D2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: white;
+    cursor: pointer;
+}
+
+.notifications-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 2rem;
+    width: 320px;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    overflow: hidden;
+    transform-origin: top right;
+    animation: dropIn 0.2s ease-out;
+}
+
+.notifications-dropdown.show {
+    display: flex;
+}
+
+.notifications-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 700;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.notifications-list {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(66, 75, 90, 0.2);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.notification-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.notification-time {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 6px;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.page-container {
+    padding: 2rem 3rem 3rem 3rem;
 }
 
 .header {

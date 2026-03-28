@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Engine | AlgoSignal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logo.png" alt="AlgoSignal Logo">
+                <span>AlgoSignal <small style="font-size: 0.6rem; color: var(--accent-color); vertical-align: super;">v3.0 (NEW)</small></span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item"><a href="index.html" class="nav-link"><i>⊞</i> Dashboard</a></li>
+                <li class="nav-item"><a href="engine.html" class="nav-link active"><i>🧠</i> Signal Engine</a></li>
+                <li class="nav-item"><a href="backtesting.html" class="nav-link"><i>🕒</i> Backtesting</a></li>
+                <li class="nav-item"><a href="tabular.html" class="nav-link"><i>📊</i> Portfolio Analytics</a></li>
+                <li class="nav-item"><a href="alerts.html" class="nav-link"><i>🔔</i> Alerts</a></li>
+                <li class="nav-item"><a href="market.html" class="nav-link"><i>📉</i> Market Data</a></li>
+                <li class="nav-item"><a href="settings.html" class="nav-link"><i>⚙️</i> Settings</a></li>
+            </ul>
+
+            <div id="userProfile" class="user-sidebar-bottom">
+                <div class="user-info">
+                    <div class="avatar" id="userInitial">?</div>
+                    <div>
+                        <div id="userName" style="font-weight: 700; font-size: 0.9rem;">Guest User</div>
+                        <div style="font-size: 0.7rem; color: var(--text-secondary);">Free Tier</div>
+                    </div>
+                </div>
+                <button onclick="handleAuthAction()" id="authBtn" class="nav-link" style="width: 100%; border: none; background: none; cursor: pointer;">
+                    <i>🔑</i> Login
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <nav class="topbar">
+                <div class="topbar-search">
+                    <i>🔍</i>
+                    <input type="text" id="topSearch" placeholder="Search stock...">
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-clock">
+                        <i style="color:var(--text-secondary)">🕒</i>
+                        <span id="liveClock">Loading...</span>
+                    </div>
+                    <div class="topbar-icon" id="notificationBtn">
+                        <i>🔔</i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="topbar-profile" id="topProfileInitial">?</div>
+                </div>
+            </nav>
+
+            <div class="page-container">
+            <header class="header">
+                <div>
+                        <h1 class="page-title">Signal Engine Console</h1>
+                        <p class="page-subtitle">Configure XGBoost models and raw data parameters</p>
+                </div>
+            </header>
+
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <span class="stat-label">Model Architecture</span>
+                    <div class="stat-val" style="color: #00c8ff;">XGBoost v2</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Active Trees</span>
+                    <div class="stat-val">300</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Learning Rate</span>
+                    <div class="stat-val">0.05</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Global Accuracy</span>
+                    <div class="stat-val" style="color: #bb86fc;">93.4%</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div class="glass-form" style="padding: 2rem; text-align: left; border-radius: 20px;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">Feature Importance Grid</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                                <span>RSI (14)</span><span>100%</span>
+                            </div>
+                            <div class="accuracy-bar"><div class="bar-fill" style="width: 100%; background: #00c8ff;"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                                <span>MACD Histogram</span><span>85%</span>
+                            </div>
+                            <div class="accuracy-bar"><div class="bar-fill" style="width: 85%; background: var(--success-color);"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                                <span>VWAP Variance</span><span>72%</span>
+                            </div>
+                            <div class="accuracy-bar"><div class="bar-fill" style="width: 72%; background: var(--color-hold);"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                                <span>Volume Profile</span><span>64%</span>
+                            </div>
+                            <div class="accuracy-bar"><div class="bar-fill" style="width: 64%; background: var(--accent-color);"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                                <span>Bollinger Bands</span><span>50%</span>
+                            </div>
+                            <div class="accuracy-bar"><div class="bar-fill" style="width: 50%; background: var(--text-secondary);"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-form" style="padding: 2rem; text-align: left; border-radius: 20px; display: flex; flex-direction: column;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 1.5rem;">Live Training Console</h2>
+                    <div style="background: rgba(0,0,0,0.5); font-family: monospace; font-size: 0.85rem; color: #00e676; padding: 1.5rem; border-radius: 10px; flex: 1; overflow-y: auto; border: 1px solid var(--border-color); line-height: 1.8;">
+                        <div style="color: #8b949e;">[08:00:12] Initializing Hyperparameters...</div>
+                        <div style="color: #8b949e;">[08:00:14] Loading OHLCV datasets...</div>
+                        <div style="color: #8b949e;">[08:00:15] Extracting 24 technical indicators...</div>
+                        <div>[08:00:18] Training AAPL model (Tree 1/300) [OK]</div>
+                        <div>[08:00:22] Training AAPL model (Tree 50/300) [OK]</div>
+                        <div>[08:00:28] Cross-validating AAPL predictions...</div>
+                        <div style="color: white; margin-top: 10px; font-weight: 700;">> AAPL Model Finalized. Test Acc: 94.2%</div>
+                        <div style="margin-top: 10px; color: #8b949e;">[08:00:32] Target TSLA next in queue...</div>
+                        <span class="pulse-dot" style="display: inline-block; background: #00e676; margin-top: 10px;"></span>
+                    </div>
+                    <button class="btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 1rem; border-radius: 12px;" onclick="showToast('Force retraining initiated', 'success')">Force Retrain Models</button>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+    <div id="toast"></div>
+    <script src="js/app.js?v=4"></script>
+</body>
+</html>

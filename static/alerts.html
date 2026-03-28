@@ -166,26 +166,13 @@
                 <span>AlgoSignal <small style="font-size: 0.6rem; color: var(--accent-color); vertical-align: super;">v3.0 (NEW)</small></span>
             </div>
             <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">
-                        <i>📊</i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="alerts.html" class="nav-link active">
-                        <i>🔔</i> Alerts
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="tabular.html" class="nav-link">
-                        <i>🧠</i> Analytics
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="report.html" class="nav-link">
-                        <i>📋</i> Reports
-                    </a>
-                </li>
+                <li class="nav-item"><a href="index.html" class="nav-link"><i>⊞</i> Dashboard</a></li>
+                <li class="nav-item"><a href="engine.html" class="nav-link"><i>🧠</i> Signal Engine</a></li>
+                <li class="nav-item"><a href="backtesting.html" class="nav-link"><i>🕒</i> Backtesting</a></li>
+                <li class="nav-item"><a href="tabular.html" class="nav-link"><i>📊</i> Portfolio Analytics</a></li>
+                <li class="nav-item"><a href="alerts.html" class="nav-link active"><i>🔔</i> Alerts</a></li>
+                <li class="nav-item"><a href="market.html" class="nav-link"><i>📉</i> Market Data</a></li>
+                <li class="nav-item"><a href="settings.html" class="nav-link"><i>⚙️</i> Settings</a></li>
             </ul>
             <div id="userProfile" class="user-sidebar-bottom">
                 <div class="user-info">
@@ -202,6 +189,25 @@
         </aside>
 
         <main class="main-content">
+            <nav class="topbar">
+                <div class="topbar-search">
+                    <i>🔍</i>
+                    <input type="text" id="topSearch" placeholder="Search stock...">
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-clock">
+                        <i style="color:var(--text-secondary)">🕒</i>
+                        <span id="liveClock">Loading...</span>
+                    </div>
+                    <div class="topbar-icon" id="notificationBtn">
+                        <i>🔔</i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="topbar-profile" id="topProfileInitial">?</div>
+                </div>
+            </nav>
+
+            <div class="page-container">
             <header class="header">
                 <div>
                     <h1>Predictive Alerts</h1>
@@ -274,6 +280,8 @@
                         </button>
                     </div>
                 </div>
+            </div>
+            </div>
             </div>
         </main>
     </div>
